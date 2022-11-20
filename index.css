@@ -1,0 +1,158 @@
+@font-face {
+  font-family: fontPixels;
+  src: url(assets/font.TTF);
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0%;
+  }
+  50% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0%;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 100%;
+  }
+
+  to {
+    opacity: 0%;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0%;
+  }
+
+  to {
+    opacity: 100%;
+  }
+}
+
+@keyframes jump {
+  from {
+    margin-top: 250px;
+  }
+  50% {
+    margin-top: 25px;
+  }
+  to {
+    margin-top: 250px;
+  }
+}
+
+@keyframes moveopp {
+  from {
+    margin-left: 1500px;
+    opacity: 100%;
+  }
+
+  to {
+    margin-left: -200px;
+    opacity: 100%;
+  }
+}
+
+@keyframes slideout {
+  from {
+    margin-left: 0%;
+  }
+
+  to {
+    margin-left: 600%;
+  }
+}
+
+body {
+  background-image: url('assets/background.svg');
+  background-repeat: no-repeat;
+  background-size: 110%;
+}
+
+.fade {
+  animation: fade 1.5s infinite;
+}
+
+.fadein {
+  animation: fadein 0.5s;
+}
+
+.fadeout {
+  animation: fadeout 0.5s;
+}
+
+.jump {
+  animation: jump 0.6s;
+}
+
+.movealittle {
+  animation: moveinalittle 0.25s;
+}
+
+.opp {
+  z-index: -1;
+  position: fixed;
+  width: 80px;
+  height: 60px;
+  bottom: 5%;
+  background-repeat: no-repeat;
+  background-size: contain, cover;
+  opacity: 0%;
+}
+
+#rv {
+  position: fixed;
+  z-index: -1;
+  margin-top: 1%;
+  width: 50%;
+  height: 70%;
+}
+
+#score {
+  color: rgb(46, 59, 46);
+  z-index: 2;
+  font-family: fontPixels;
+  margin-left: 94%;
+  margin-bottom: 0;
+}
+
+#subtitle {
+  color: rgb(116, 172, 116);
+  z-index: 2;
+  font-family: fontPixels;
+  margin-top: 0;
+  font-size: 35px;
+}
+
+#title {
+  color: rgb(95, 139, 95);
+  z-index: 2;
+  font-family: fontPixels;
+  margin-top: 0;
+  margin-bottom: 40px;
+  font-size: 75px;
+}
+
+#title-container {
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+#walter {
+  position: fixed;
+  z-index: -1;
+  width: 150px;
+  height: 300px;
+  margin-left: 50%;
+  margin-top: 250px;
+  background-image: url(assets/waltuh.png);
+}
