@@ -44,12 +44,14 @@ function createOpp() {
         oppNum++
     }
     num++
-    if (score < 100) {
+    if (score < 50) {
         oppClock = Math.floor((Math.random() * 1350) + 250);
-    } else if (score > 100) {
-        oppClock = Math.floor((Math.random() * 850) + 250);
-    } else if (score > 500) {
+    } else if (score > 50 && score < 100) {
+        oppClock = Math.floor((Math.random() * 750) + 250);
+    } else if (score > 100 && score < 150) {
         oppClock = Math.floor((Math.random() * 500) + 250);
+    } else if (score > 150 && score < 200) {
+        oppClock = Math.floor((Math.random() * 250) + 250);
     }
     console.log(oppClock);
 }
