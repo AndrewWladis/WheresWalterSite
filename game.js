@@ -2,14 +2,21 @@ const rv = document.getElementById('rv');
 const walter = document.getElementById('walter');
 const subtitle = document.getElementById('subtitle');
 const title = document.getElementById('title');
+const scoreGreen = 'rgb(46, 59, 46)';
+const scoreBlue = 'rgb(93, 174, 177)';
+let scoreColor = scoreGreen;
+let scoreColorNum = 0;
 let isGameOver = true;
 let oppClock = 1000;
 let oppNum = 0;
+let crystalNum = 5;
 let score;
 let musicNum = 0;
 let num;
+let isCrystalOnScreen = false;
 
 subtitle.classList.add('fade')
+document.getElementById('score').style.color = scoreGreen;
 
 function playMusic() {
     const theme = new Audio('assets/whereswalter.mp3');
@@ -30,9 +37,26 @@ function jump() {
         }, 500);
 }
 
+function createCrystal() {
+    let crystal = document.createElement('img');
+    crystal.classList.add('crystal');
+    document.body.append(crystal);
+    crystal.id = `crystal-${oppNum}`;
+    crystal.style.animation = 'moveopp 2s';
+    crystal.src = 'assets/crystal.gif';
+    crystalNum = Math.floor((Math.random() * 30) + 3);
+    isCrystalOnScreen = true;
+    setTimeout(
+        function() {
+            isCrystalOnScreen = false;
+        }, 2000);
+}
+
 function createOpp() {
     if (num === 0) {
         console.log('first opp')
+    } else if (crystalNum === 0) {
+        createCrystal();
     } else {
         let opp = document.createElement('img');
         opp.classList.add('opp');
@@ -40,8 +64,8 @@ function createOpp() {
         opp.id = `opp${oppNum}`;
         opp.style.animation = 'moveopp 2s';
         opp.src = `assets/${Math.floor(Math.random() * 4)}.png`;
-        console.log(opp);
-        oppNum++
+        oppNum++;
+        crystalNum -= 1;
     }
     num++
     if (score < 50) {
@@ -53,7 +77,6 @@ function createOpp() {
     } else if (score > 150 && score < 200) {
         oppClock = Math.floor((Math.random() * 250) + 250);
     }
-    console.log(oppClock);
 }
 
 function start() {
@@ -131,6 +154,12 @@ setInterval(function () {
         playMusic();
         musicNum = 0;
     }
+    if (scoreColorNum > 0) {
+        scoreColorNum -= 1;
+    }
+    if (scoreColorNum === 0) {
+        document.getElementById('score').style.color = scoreGreen;
+    }
 }, 1000);
 
 setInterval(function () {
@@ -150,10 +179,23 @@ setInterval(function () {
 }, 100);
 
 setInterval(function () {
+    let crystalPosition;
+    if (isCrystalOnScreen == false) {
+        crystalPosition = null;
+    } else if (isCrystalOnScreen == true) {
+        crystalPosition = parseInt(window.getComputedStyle(document.getElementById(`crystal-${oppNum}`)).getPropertyValue('margin-left'));
+    }
     let marginLeft = parseInt(window.getComputedStyle(document.getElementById(`opp${oppNum - 1}`)).getPropertyValue('margin-left'));
-    if (marginLeft <= 825 && marginLeft >= 720 && parseInt(window.getComputedStyle(walter).getPropertyValue('margin-top')) > 175) {
+    let walterPosition = parseInt(window.getComputedStyle(walter).getPropertyValue('margin-top'));
+    if (marginLeft <= 825 && marginLeft >= 720 && walterPosition > 175) {
         endGame();
         let deathSound = new Audio('assets/walterdeath.mp3');
         deathSound.play();
+    }
+    console.log(marginLeft)
+    if (crystalPosition <= 825 && crystalPosition >= 720 && walterPosition < 175) {
+        score += 10;
+        scoreColorNum = 3;
+        document.getElementById('score').style.color = scoreBlue;
     }
 }, 30);

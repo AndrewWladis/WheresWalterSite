@@ -75,6 +75,17 @@ body {
   background-size: 110%;
 }
 
+.crystal {
+  z-index: -1;
+  position: fixed;
+  width: 80px;
+  height: 60px;
+  bottom: 50%;
+  background-repeat: no-repeat;
+  background-size: contain, cover;
+  opacity: 0%;
+}
+
 .fade {
   animation: fade 1.5s infinite;
 }
@@ -115,7 +126,7 @@ body {
 }
 
 #score {
-  color: rgb(46, 59, 46);
+  color: rgb(93, 174, 177);
   z-index: 2;
   font-family: fontPixels;
   margin-left: 94%;
