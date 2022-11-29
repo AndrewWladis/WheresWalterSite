@@ -1,24 +1,40 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Where's Walter</title>
     <link rel="stylesheet" href="index.css" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-  </head>
-  <body scroll="no" style="overflow: hidden">
-    <h1 id="score">0</h1>
+    <style>
+        body {
+            background-color: rgb(0, 36, 0);
+        }
+    </style>
+</head>
+<body>
     <div id="title-container">
-      <p id="title">WHERE'S WALTER</p>
-      <p id="subtitle">CLICK TO START</p>
+        <p id="title">WHERE'S WALTER</p>
+        <p id="subtitle">CHOOSE YOUR CHARACTER</p>
     </div>
-    <img src="assets/rv.png" id="rv" />
-    <div id="walter"></div>
-  </body>
-  <script src="game.js"></script>
+    <div id="choose-your-character-div">
+        <img id="character" src="assets/walter.png" />
+    </div>
+    <div id="character-select-icon-div">
+        <img id="waltericon" class="character-select-icon" src="assets/waltericon.png"/>
+        <img id="jesseicon" class="character-select-icon" src="assets/jesseicon.png"/>
+        <img id="jricon" class="character-select-icon" src="assets/jricon.png"/>
+    </div>
+    <div id="config-container">
+        <div id="music-container">
+            <h1 class="config-label">SOUND</h1>
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <button class="start-button">START</button>
+    </div>
+</body>
+<script src="character-select.js"></script>
 </html>

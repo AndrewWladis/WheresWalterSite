@@ -1,3 +1,4 @@
+const params = new URLSearchParams(window.location.search);
 const rv = document.getElementById('rv');
 const walter = document.getElementById('walter');
 const subtitle = document.getElementById('subtitle');
@@ -14,27 +15,42 @@ let score;
 let musicNum = 0;
 let num;
 let isCrystalOnScreen = false;
+let soundCondition = params.get('sound');
+let character = params.get('character');
 
 subtitle.classList.add('fade')
 document.getElementById('score').style.color = scoreGreen;
+walter.style.backgroundImage = `url("assets/${character}.png")`
 
 function playMusic() {
     const theme = new Audio('assets/whereswalter.mp3');
     if (musicNum === 0) {
-        theme.play();
+        if (soundCondition === true) {
+            theme.play();
+        }
     }
 }
 
 function jump() {
     if (!isGameOver) {
-        walter.classList.add('jump');
-        let jumpSound = new Audio('assets/jump.mp3');
-        jumpSound.play();
+        if (character === 'jr') {
+            walter.style.backgroundImage = `url("assets/${character}jumping.png")`;
+            setTimeout(
+                function() {
+                    walter.style.backgroundImage = `url(assets/${character}running1.png)`;
+                }, 750);
+        } else {
+            walter.classList.add('jump');
+            let jumpSound = new Audio('assets/jump.mp3');
+            if (soundCondition === true) {
+                jumpSound.play();
+            }
+            setTimeout(
+                function() {
+                    walter.classList.remove('jump');
+                }, 500);
+        }
     }
-    setTimeout(
-        function() {
-            walter.classList.remove('jump');
-        }, 500);
 }
 
 function createCrystal() {
@@ -54,8 +70,8 @@ function createCrystal() {
 
 function createOpp() {
     if (num === 0) {
-        console.log('first opp')
-    } else if (crystalNum === 0) {
+ 
+    } else if (crystalNum === 0 && character !== 'jr') {
         createCrystal();
     } else {
         let opp = document.createElement('img');
@@ -63,7 +79,7 @@ function createOpp() {
         document.body.append(opp);
         opp.id = `opp${oppNum}`;
         opp.style.animation = 'moveopp 2s';
-        opp.src = `assets/${Math.floor(Math.random() * 4)}.png`;
+        opp.src = `assets/${Math.floor(Math.random() * 5)}.png`;
         oppNum++;
         crystalNum -= 1;
     }
@@ -96,7 +112,7 @@ function start() {
             title.style.opacity = '0%';
             subtitle.classList.remove('fadeout');
             title.classList.remove('fadeout');
-            walter.style.backgroundImage = 'url(assets/walterrunning1.png)'
+            walter.style.backgroundImage = `url(assets/${character}running1.png)`
         }, 499);
     setTimeout(
         function() {
@@ -123,8 +139,6 @@ function endGame() {
 
 
 
-
-
  
 
 
@@ -138,6 +152,8 @@ document.onclick = function(){
         jump()
     }
 }
+
+
 
 setInterval(function () {
     if (!isGameOver) {
@@ -171,10 +187,10 @@ setInterval(function () {
 
 setInterval(function () {
     let waltuhImg = walter.style.backgroundImage;
-    if(waltuhImg === 'url("assets/walterrunning1.png")') {
-        walter.style.backgroundImage = 'url(assets/walterrunning2.png)';
-    } else if(waltuhImg === 'url("assets/walterrunning2.png")') {
-        walter.style.backgroundImage = 'url(assets/walterrunning1.png)';
+    if(waltuhImg === `url("assets/${character}running1.png")`) {
+        walter.style.backgroundImage = `url(assets/${character}running2.png)`;
+    } else if(waltuhImg === `url("assets/${character}running2.png")`) {
+        walter.style.backgroundImage = `url(assets/${character}running1.png)`;
     }
 }, 100);
 
@@ -187,12 +203,22 @@ setInterval(function () {
     }
     let marginLeft = parseInt(window.getComputedStyle(document.getElementById(`opp${oppNum - 1}`)).getPropertyValue('margin-left'));
     let walterPosition = parseInt(window.getComputedStyle(walter).getPropertyValue('margin-top'));
-    if (marginLeft <= 825 && marginLeft >= 720 && walterPosition > 175) {
+    if (marginLeft <= 825 && marginLeft >= 720 && walterPosition > 175 && character !== 'jr') {
         endGame();
-        let deathSound = new Audio('assets/walterdeath.mp3');
-        deathSound.play();
+        if (soundCondition === true) {
+            let deathSound = new Audio(`assets/${character}death.mp3`);
+            deathSound.play();
+        }
     }
-    console.log(marginLeft)
+
+    if(marginLeft <= 825 && marginLeft >= 720 && character === 'jr' && walter.style.backgroundImage !== `url("assets/${character}jumping.png")`) {
+        endGame();
+        if (soundCondition === true) {
+            let deathSound = new Audio(`assets/${character}death.mp3`);
+            deathSound.play();
+        }
+    }
+
     if (crystalPosition <= 825 && crystalPosition >= 720 && walterPosition < 175) {
         score += 10;
         scoreColorNum = 3;
