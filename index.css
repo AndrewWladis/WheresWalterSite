@@ -3,6 +3,11 @@
   src: url(assets/font.TTF);
 }
 
+@font-face {
+  font-family: squareFont;
+  src: url(assets/Square.ttf);
+}
+
 @keyframes fade {
   0% {
     opacity: 0%;
@@ -35,6 +40,29 @@
   }
 }
 
+@keyframes fade2 {
+  0% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+@keyframes killTuco {
+  from {
+    margin-left: 0%;
+    margin-top: 50px;
+  }
+  to {
+    margin-left: -200%;
+    margin-top: -170px;
+  }
+}
+
 @keyframes jump {
   from {
     margin-top: 250px;
@@ -59,6 +87,15 @@
   }
 }
 
+@keyframes moveTuco {
+  from {
+    margin-left: 120%;
+  }
+  to {
+    margin-left: 65%;
+  }
+}
+
 @keyframes slideout {
   from {
     margin-left: 0%;
@@ -69,10 +106,35 @@
   }
 }
 
-body {
-  background-image: url('assets/background.svg');
-  background-repeat: no-repeat;
-  background-size: 110%;
+input:checked + .slider {
+  background-color: rgb(116, 172, 116);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px rgb(116, 172, 116);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.character-select-icon {
+  max-width: 100px;
+  max-height: 100px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.border {
+  border: 4px solid rgb(93, 174, 177);
+  border-radius: 5px;
+}
+
+.config-label {
+  font-family: squareFont;
+  color: white;
 }
 
 .crystal {
@@ -98,8 +160,16 @@ body {
   animation: fadeout 0.5s;
 }
 
+.fade2 {
+  animation: fade2 0.5s;
+}
+
 .jump {
   animation: jump 0.6s;
+}
+
+.killTuco {
+  animation: killTuco 0.7;
 }
 
 .movealittle {
@@ -115,6 +185,120 @@ body {
   background-repeat: no-repeat;
   background-size: contain, cover;
   opacity: 0%;
+}
+
+.rv {
+  transform: scaleX(-1);
+  animation: moveTuco 0.5s;
+  position: fixed;
+  z-index: -1;
+  width: 80%;
+  height: 100%;
+  margin-top: -20%;
+}
+
+.start-button {
+  margin-top: 2.5%;
+  color: white;
+  font-family: squareFont;
+  width: 10%;
+  height: 20%;
+  font-size: 50px;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+}
+
+.start-button:hover {
+  color: rgb(116, 172, 116);
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.tuco {
+  position: fixed;
+  z-index: -1;
+  width: 175px;
+  height: 350px;
+  background-image: url(assets/tucofight.png);
+  margin-top: 50px;
+}
+
+.tuco-div {
+  animation: moveTuco 0.5s;
+  margin-top: 150px;
+}
+
+.tucoHealth {
+  margin-bottom: 0;
+  margin-left: 15px;
+  background: rgb(143, 29, 29);
+}
+
+#character-select-icon-div {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+#choose-your-character-div {
+  position:absolute;
+  left:0;
+  right:0;
+  height: 350px;
+  background-color: rgb(76, 132, 76);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#config-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
+}
+
+#music-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #rv {
@@ -165,5 +349,5 @@ body {
   height: 300px;
   margin-left: 50%;
   margin-top: 250px;
-  background-image: url(assets/waltuh.png);
+  background-image: url(assets/walter.png);
 }
