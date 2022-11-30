@@ -106,7 +106,7 @@ function createCrystal() {
     crystal.id = `crystal-${oppNum}`;
     crystal.style.animation = 'moveopp 2s';
     crystal.src = 'assets/crystal.gif';
-    crystalNum = Math.floor((Math.random() * 30) + 3);
+    crystalNum = Math.floor((Math.random() * 50) + 3);
     isCrystalOnScreen = true;
     setTimeout(
         function() {
