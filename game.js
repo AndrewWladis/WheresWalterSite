@@ -117,7 +117,7 @@ function createCrystal() {
 function createOpp() {
     if (num === 0) {
  
-    } else if (crystalNum === 0 && character !== 'jr' && score < 155) {
+    } else if (crystalNum === 0 && character !== 'jr' && score < 79) {
         createCrystal();
     } else {
         let opp = document.createElement('img');
