@@ -139,7 +139,7 @@ function start() {
     title.classList.add('fadeout');
     playMusic()
     isGameOver = false;
-    score = 95;
+    score = 0;
     num = 0;
     oppNum = 0;
     rv.style.animation = "slideout 2s cubic-bezier(.55,.6,.68,.28)";
