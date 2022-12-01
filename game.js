@@ -6,7 +6,6 @@ const title = document.getElementById('title');
 const scoreHeader = document.getElementById('score');
 const scoreGreen = 'rgb(46, 59, 46)';
 const scoreBlue = 'rgb(93, 174, 177)';
-const theme = new Audio('assets/whereswalter.mp3');
 let scoreColor = scoreGreen;
 let scoreColorNum = 0;
 let isGameOver = true;
@@ -73,6 +72,7 @@ walter.style.backgroundImage = `url("assets/${character}.png")`
 
 function playMusic() {
     if (musicNum === 0 && soundCondition) {
+        const theme = new Audio('assets/whereswalter.mp3');
         theme.play();
     }
 }
@@ -279,13 +279,7 @@ function rvCrash() {
 const pressed = [];
 const secretCode = 'yui';
 
-window.addEventListener('keyup', (e) => {
-    
-        //make it so that if they type hello there it opens in a new tab with general kenobi 
-});
-
 document.addEventListener('keyup', e => {
-    console.log(e.key);
     pressed.push(e.key)
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
 
@@ -351,12 +345,14 @@ setInterval(function () {
 
 
 setInterval(function () {
-    if (!isGameOver && isFightOn) {
+    if (musicNum > 0) {
         musicNum++
     }
-    if (musicNum >= 129) {
-        musicNum = 0;
-        playMusic();
+    console.log(musicNum)
+    if (musicNum >= 115 && soundCondition) {
+        const theme = new Audio('assets/whereswalter.mp3');
+        theme.play();
+        musicNum = 1;
     }
     if (scoreColorNum > 0) {
         scoreColorNum -= 1;
@@ -420,16 +416,16 @@ setInterval(function () {
     let marginLeft = parseInt(window.getComputedStyle(document.getElementById(`opp${oppNum - 1}`)).getPropertyValue('margin-left'));
     let walterPosition = parseInt(window.getComputedStyle(walter).getPropertyValue('margin-top'));
     if (marginLeft <= 825 && marginLeft >= 720 && walterPosition > 175 && character !== 'jr') {
-        endGame();
+        /*endGame();
         if (soundCondition === true) {
             let deathSound = new Audio(`assets/${character}death.mp3`);
             deathSound.play();
-        }
+        }*/
     }
 
     if(marginLeft <= 825 && marginLeft >= 720 && character === 'jr' && walter.style.backgroundImage !== `url("assets/${character}jumping.png")`) {
         endGame();
-        if (soundCondition === true) {
+        if (soundCondition) {
             let deathSound = new Audio(`assets/${character}death.mp3`);
             deathSound.play();
         }
@@ -438,6 +434,10 @@ setInterval(function () {
     if (crystalPosition <= 825 && crystalPosition >= 720 && walterPosition < 175) {
         score += 10;
         scoreColorNum = 3;
+        if (soundCondition) {
+            let powerupSound = new Audio('assets/powerup.wav');
+            powerupSound.play();
+        }
         document.getElementById('score').style.color = scoreBlue;
     }
 }, 30);
