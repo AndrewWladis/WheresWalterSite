@@ -72,6 +72,7 @@ walter.style.backgroundImage = `url("assets/${character}.png")`
 
 function playMusic() {
     if (musicNum === 0 && soundCondition) {
+        musicNum = 1;
         const theme = new Audio('assets/whereswalter.mp3');
         theme.play();
     }
@@ -349,7 +350,7 @@ setInterval(function () {
         musicNum++
     }
     console.log(musicNum)
-    if (musicNum >= 115 && soundCondition) {
+    if (musicNum >= 66 && soundCondition) {
         const theme = new Audio('assets/whereswalter.mp3');
         theme.play();
         musicNum = 1;
@@ -416,11 +417,11 @@ setInterval(function () {
     let marginLeft = parseInt(window.getComputedStyle(document.getElementById(`opp${oppNum - 1}`)).getPropertyValue('margin-left'));
     let walterPosition = parseInt(window.getComputedStyle(walter).getPropertyValue('margin-top'));
     if (marginLeft <= 825 && marginLeft >= 720 && walterPosition > 175 && character !== 'jr') {
-        /*endGame();
+        endGame();
         if (soundCondition === true) {
             let deathSound = new Audio(`assets/${character}death.mp3`);
             deathSound.play();
-        }*/
+        }
     }
 
     if(marginLeft <= 825 && marginLeft >= 720 && character === 'jr' && walter.style.backgroundImage !== `url("assets/${character}jumping.png")`) {
