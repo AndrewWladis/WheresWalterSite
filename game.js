@@ -17,6 +17,7 @@ let num;
 let isCrystalOnScreen = false;
 let soundCondition = params.get('sound') == 'true';
 let character = params.get('character');
+let mode = params.get('mode');
 let isFightOn = false;
 let tucoHealth = 100;
 
@@ -39,6 +40,7 @@ async function typeSentence(sentence, delay = 100) {
   }  
 
 var images = [];
+
 function preload() {
     for (var i = 0; i < arguments.length; i++) {
         images[i] = new Image();
@@ -118,8 +120,12 @@ function createCrystal() {
 function createOpp() {
     if (num === 0) {
  
-    } else if (crystalNum === 0 && character !== 'jr' && score < 79) {
-        createCrystal();
+    } else if (crystalNum === 0 && character !== 'jr') {
+        if (mode === 'story' && score < 79) {
+            createCrystal();
+        } else if (mode === 'infinite') {
+            createCrystal();
+        }
     } else {
         let opp = document.createElement('img');
         opp.classList.add('opp');
@@ -369,7 +375,7 @@ setInterval(function () {
         scoreHeader.innerText = score;
     }
 
-    if (score >= 100) {
+    if (score >= 100 && mode === 'story') {
         fight();
     }
 }, 500);

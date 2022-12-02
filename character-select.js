@@ -3,9 +3,12 @@ const jesse = document.getElementById('jesseicon');
 const jr = document.getElementById('jricon');
 const imageCharacter = document.getElementById('character');
 const startButton = document.querySelector('.start-button');
+const infiniteInput = document.getElementById('infiniteSlider');
+const infiniteLabel = document.getElementById('infiniteLabel')
 const nameOf = (f) => (f).toString().replace(/[ |\(\)=>]/g,'');
 const border = 'border';
 let current = walter;
+let statusButton = 'story'
 
 current.classList.add(border);
 
@@ -37,6 +40,16 @@ jr.onclick = function(){
     addBorder(jr, 'jr')
 }
 
+infiniteInput.onclick = function(){
+    if(statusButton === 'story') {
+        infiniteLabel.innerText = 'INFINITE';
+        statusButton = 'infinite';
+    } else {
+        infiniteLabel.innerText = 'STORY';
+        statusButton = 'story'
+    }
+    //detect the color and switch mode accordingly
+}
 
 document.addEventListener('keyup', e => {
     if (e.key === "ArrowLeft") {
@@ -60,7 +73,7 @@ document.addEventListener('keyup', e => {
 
 startButton.onclick = function(){
     let url = new URL("https://whereswalter.netlify.app/game.html?");
-    const soundInput = document.querySelector('.slider');
+    const soundInput = document.getElementById('soundSlider');
     let sound;
     let guy;
 
@@ -79,6 +92,7 @@ startButton.onclick = function(){
     }
 
     url.searchParams.append('sound', sound);
+    url.searchParams.append('mode', statusButton);
     url.searchParams.append('character', guy);
     window.location.href = url;
 } 

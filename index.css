@@ -295,6 +295,10 @@ input:checked + .slider:before {
   align-items: center;
 }
 
+#infiniteLabel {
+  font-size: 30px;
+}
+
 #music-container {
   display: flex;
   flex-direction: column;
