@@ -294,7 +294,7 @@ document.addEventListener('keyup', e => {
         score = 90;
     }
 
-    if (e.key === "a" && subtitle.innerText === 'PRESS A TO ATTACK') {
+    if (e.key === "a" && subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
         tucoHealth -= 2;
         document.querySelector('.tucoHealth').value = tucoHealth;
         walter.style.backgroundImage = `url(assets/${character}punch.png)`;
@@ -381,7 +381,7 @@ setInterval(function () {
 }, 500);
 
 setInterval(function () {
-    if (subtitle.innerText === 'PRESS A TO ATTACK') {
+    if (subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
         if (character === 'jr') {
             score -= 6;
         } else {
