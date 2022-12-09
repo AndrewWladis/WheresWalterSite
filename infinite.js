@@ -17,27 +17,8 @@ let num;
 let isCrystalOnScreen = false;
 let soundCondition = params.get('sound') == 'true';
 let character = params.get('character');
-let mode = params.get('mode');
-let isFightOn = false;
+let mode = 'infinite';
 let tucoHealth = 100;
-
-
-
-async function typeSentence(sentence, delay = 100) {
-    const letters = sentence.split("");
-    let i = 0;
-    while(i < letters.length) {
-      await waitForMs(delay);
-      subtitle.append(letters[i].toUpperCase());
-      i++
-    }
-    return;
-  }
-  
-  
-  function waitForMs(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }  
 
 var images = [];
 
@@ -81,7 +62,7 @@ function playMusic() {
 }
 
 function jump() {
-    if (!isGameOver && !isFightOn) {
+    if (!isGameOver) {
         if (character === 'jr') {
             walter.style.backgroundImage = `url("assets/${character}jumping.png")`;
             setTimeout(
@@ -121,11 +102,7 @@ function createOpp() {
     if (num === 0) {
  
     } else if (crystalNum === 0 && character !== 'jr') {
-        if (mode === 'story' && score < 79) {
-            createCrystal();
-        } else if (mode === 'infinite') {
-            createCrystal();
-        }
+        createCrystal();
     } else {
         let opp = document.createElement('img');
         opp.classList.add('opp');
@@ -179,110 +156,6 @@ function endGame() {
         }, 499);
 }
 
-function createTuco() {
-    let tucoDiv = document.createElement('div');
-    let tuco = document.createElement('div');
-    tuco.classList.add('tuco');
-    tuco.id = 'tucoSalamaca'
-    tucoDiv.classList.add('tuco-div')
-    tucoDiv.innerHTML= `<progress class="tucoHealth" value="100" max="100"></progress>`;
-    document.body.append(tucoDiv)
-    tucoDiv.appendChild(tuco)
-    setTimeout(
-        function() {
-            tucoDiv.style.marginLeft = '65%';
-            walter.style.backgroundImage = `url(assets/${character}fight.png)`;
-        }, 495); 
-}
-
-function fight() {
-    document.getElementById(`opp${oppNum - 1}`).remove()
-    walter.style.backgroundImage = `url(assets/${character}.png)`;
-    isFightOn = true;
-    isGameOver = true;
-    /*
-    scoreHeader.style.animation = 'fadeout 1s'
-    score++
-    setTimeout(
-        function() {
-            scoreHeader.style.opacity = '0%';
-        }, 990);
-    */
-    setTimeout(
-        function() {
-            createTuco();
-            let num = Math.floor(Math.random() * 1);
-        }, 1500);
-    setTimeout(
-        function() {
-            subtitle.style.opacity = '100%';
-            subtitle.innerText = 'PRESS A TO ATTACK'
-        }, 3000);
-}
-
-function credits() {
-    subtitle.innerText = ''
-    subtitle.style.opacity = '100%';
-    typeSentence('CREATED BY ANDY WLADIS');
-    setTimeout(
-        function() {
-            subtitle.innerText = ''
-            typeSentence('A DUCKY COMICS PRODUCTION')
-            setTimeout(
-                function() {
-                    subtitle.innerText = '';
-                    title.style.opacity = '100%';
-                    title.innerText = "WHERE'S WALTER";
-                }, 5000);
-        }, 5000);
-}
-
-function rvCrash() {
-    document.querySelector('.tucoHealth').style.opacity = '0%';
-    const tucoD = document.querySelector('#tucoSalamaca');
-    const rv = document.createElement('img');
-    rv.src = 'assets/rv.png'
-    rv.classList.add('rv');
-    document.body.append(rv);
-    setTimeout(
-        function() {
-            rv.style.marginLeft = '65%'
-        }, 490);
-    setTimeout(
-        function() {
-            tucoD.style.animation = 'killTuco 0.5s';
-            setTimeout(
-                function() {
-                    tucoD.style.opacity = '0%';
-                    subtitle.innerText = ''
-                    let characterTLC = character.toLowerCase()
-                    if (characterTLC === 'walter') {
-                        typeSentence('Jesse: Yo Mr Bitch! Hop in')
-                    } else {
-                        typeSentence(`Walter: ${characterTLC.charAt(0).toUpperCase() + characterTLC.slice(1)}, hop in`)
-                    }
-                    setTimeout(
-                        function() {
-                            document.body.style.animation = 'fadeout 1s'
-                            setTimeout(
-                                function() {
-                                    walter.style.opacity = '0%'
-                                    rv.style.opacity = '0%'
-                                    subtitle.style.opacity = '0%'
-                                    scoreHeader.style.opacity = '0%'
-                                    setTimeout(
-                                        function() {
-                                            credits()
-                                        }, 1000);
-                                }, 990);
-                        }, 8000);
-                }, 490);
-        }, 400);
-}
-
-
-
-
 const pressed = [];
 const secretCode = 'yui';
 
@@ -293,52 +166,15 @@ document.addEventListener('keyup', e => {
     if(pressed.join('').includes(secretCode)) {
         score = 90;
     }
-
-    if (e.key === "a" && subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
-        tucoHealth -= 2;
-        document.querySelector('.tucoHealth').value = tucoHealth;
-        walter.style.backgroundImage = `url(assets/${character}punch.png)`;
-        document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucoattacked.png)';
-        setTimeout(
-            function() {
-                walter.style.backgroundImage = `url(assets/${character}fight.png)`;
-                document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucofight.png)';
-            }, 100);
-        if (tucoHealth === 0) {
-            subtitle.innerText = ''
-            if (character.toLowerCase() === 'walter') {
-                typeSentence('Tuco: You came here to give me more meth?')
-            } else {
-                typeSentence('Tuco: You are dead')
-            }
-            setTimeout(
-                function() {
-                    subtitle.innerText = ''
-                    if (character.toLowerCase() === 'jr') {
-                        typeSentence('Jr: Your a pussy')
-                    } else if (character.toLowerCase() === 'walter') {
-                        typeSentence('Walter: This is not meth')
-                    } else if (character.toLowerCase() === 'jesse') {
-                        typeSentence('Jesse: Your about to die, bitch')
-                    }
-                }, 6250);
-            setTimeout(
-                function() {
-                    rvCrash();
-                }, 10250);
-        }
-    }
 })
 
 document.addEventListener('keydown', jump)
 
 document.onclick = function(){
-    if (isGameOver && !isFightOn) {
-        start();
-    } else if (isGameOver && isFightOn) {
+    if (!isGameOver) {
         jump()
-    } else {
-        jump()
+    } else if (isGameOver) {
+        start()
     }
 }
 
@@ -378,30 +214,6 @@ setInterval(function () {
         fight();
     }
 }, 500);
-
-setInterval(function () {
-    if (subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
-        if (character === 'jr') {
-            score -= 6;
-        } else {
-            score -= 4;
-        }
-        scoreHeader.innerText = score;
-        scoreHeader.style.color = 'red';
-        walter.style.backgroundImage = `url(assets/${character}attacked.png)`;
-        document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucopunch.png)';
-        setTimeout(
-            function() {
-                scoreHeader.style.color = scoreColor;
-                walter.style.backgroundImage = `url(assets/${character}fight.png)`;
-                document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucofight.png)';
-            }, 100);
-        if(score < 1) {
-            endGame();
-
-        }
-    }
-}, 499);
 
 setInterval(function () {
     let waltuhImg = walter.style.backgroundImage;

@@ -40,7 +40,7 @@ jr.onclick = function(){
     addBorder(jr, 'jr')
 }
 
-infiniteInput.onclick = function(){
+/*infiniteInput.onclick = function(){
     if(statusButton === 'story') {
         infiniteLabel.innerText = 'INFINITE';
         statusButton = 'infinite';
@@ -49,7 +49,7 @@ infiniteInput.onclick = function(){
         statusButton = 'story'
     }
     //detect the color and switch mode accordingly
-}
+}*/
 
 document.addEventListener('keyup', e => {
     if (e.key === "ArrowLeft") {

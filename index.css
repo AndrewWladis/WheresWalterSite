@@ -308,7 +308,7 @@ input:checked + .slider:before {
 #rv {
   position: fixed;
   z-index: -1;
-  margin-top: 1%;
+  margin-top: 100%;
   width: 50%;
   height: 70%;
 }
