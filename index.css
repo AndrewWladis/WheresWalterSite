@@ -250,6 +250,17 @@ input:checked + .slider:before {
   transition: .4s;
 }
 
+.slideinguy {
+  position: fixed;
+  z-index: -1;
+  width: 150px;
+  height: 300px;
+  margin-top: 250px;
+  transform: scaleX(-1);
+  background-image: url(assets/walter.png);
+  animation: moveTuco 0.5s;
+}
+
 .tuco {
   position: fixed;
   z-index: -1;
@@ -260,7 +271,7 @@ input:checked + .slider:before {
 }
 
 .tuco-div {
-  animation: moveTuco 0.5s;
+  
   margin-top: 150px;
 }
 

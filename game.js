@@ -16,29 +16,43 @@ let musicNum = 0;
 let num;
 let isCrystalOnScreen = false;
 let soundCondition = params.get('sound') == 'true';
-let character = params.get('character');
-let mode = params.get('mode');
+let level = parseInt(params.get('level'));
 let isFightOn = false;
 let tucoHealth = 100;
+let isTalking = false;
+let talkNum = 0;
+
+//SET THESE FOR EVERY LEVEL
+let character;
+let boss = false;
+let stopGameNum = 0;
+let bossAttack;
+//how much the boss attacks for, an example could be 4, which is the version you had for the tuco fight
+
+let attackLevel;
+//how much you attack for, an example could be 2, which is the version you had for the tuco fight
+let bossWithLastName;
+//example could be gusFring or tucoSalamanca
+
+const levelOneText = ['WALTER: PINKMAN?', 'JESSE: SHH! MR. WHITE?', 'WALTER: I THINK WE SHOULD PARTNER UP', 'JESSE: YOU WANT TO COOK?', 'WALTER: YOU KNOW THE BUISNESS,', 'WALTER: I KNOW THE CHEMISTRY', "JESSE: FINE. LET'S DO THIS, BITCH"]
 
 
 
-async function typeSentence(sentence, delay = 100) {
-    const letters = sentence.split("");
-    let i = 0;
-    while(i < letters.length) {
-      await waitForMs(delay);
-      subtitle.append(letters[i].toUpperCase());
-      i++
-    }
-    return;
-  }
-  
-  
-  function waitForMs(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }  
 
+
+
+
+title.style.fontSize = '60px';
+subtitle.classList.add('fade');
+scoreHeader.style.color = scoreGreen;
+
+if (level === 1) {
+    character = 'walter';
+    stopGameNum = 25;
+    title.innerText = 'LEVEL 1: PARTNER UP'
+}
+
+walter.style.backgroundImage = `url("assets/${character}.png")`
 var images = [];
 
 function preload() {
@@ -68,9 +82,27 @@ preload(
 
 
 
-subtitle.classList.add('fade')
-scoreHeader.style.color = scoreGreen;
-walter.style.backgroundImage = `url("assets/${character}.png")`
+
+
+
+
+
+
+async function typeSentence(sentence, delay = 100) {
+    const letters = sentence.split("");
+    let i = 0;
+    while(i < letters.length) {
+      await waitForMs(delay);
+      subtitle.append(letters[i].toUpperCase());
+      i++
+    }
+    return;
+  }
+  
+  
+function waitForMs(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 function playMusic() {
     if (musicNum === 0 && soundCondition) {
@@ -119,11 +151,9 @@ function createCrystal() {
 
 function createOpp() {
     if (num === 0) {
- 
-    } else if (crystalNum === 0 && character !== 'jr') {
-        if (mode === 'story' && score < 79) {
-            createCrystal();
-        } else if (mode === 'infinite') {
+
+    } else if (crystalNum === 0) {
+        if (score < stopGameNum - 20) {
             createCrystal();
         }
     } else {
@@ -134,9 +164,18 @@ function createOpp() {
         opp.style.animation = 'moveopp 2s';
         opp.src = `assets/${Math.floor(Math.random() * 5)}.png`;
         oppNum++;
-        crystalNum -= 1;
+        if (score < stopGameNum - 20) {
+            crystalNum -= 1;
+        }
     }
     num++
+}
+function rvLeave() {
+    rv.style.animation = "slideout 2s cubic-bezier(.55,.6,.68,.28)";
+    setTimeout(
+        function() {
+            rv.style.opacity = "0%";
+        }, 1995);
 }
 
 function start() {
@@ -149,8 +188,6 @@ function start() {
     score = 0;
     num = 0;
     oppNum = 0;
-    rv.style.animation = "slideout 2s cubic-bezier(.55,.6,.68,.28)";
-    
     setTimeout(
         function() {
             subtitle.style.opacity = '0%';
@@ -159,10 +196,6 @@ function start() {
             title.classList.remove('fadeout');
             walter.style.backgroundImage = `url(assets/${character}running1.png)`
         }, 499);
-    setTimeout(
-        function() {
-            rv.style.opacity = "0%";
-        }, 1995);
 }
 
 function endGame() {
@@ -183,8 +216,9 @@ function createTuco() {
     let tucoDiv = document.createElement('div');
     let tuco = document.createElement('div');
     tuco.classList.add('tuco');
-    tuco.id = 'tucoSalamaca'
+    tuco.id = bossWithLastName;
     tucoDiv.classList.add('tuco-div')
+    tucoDiv.style.backgroundImage = `url(assets/${boss}fight.png);`
     tucoDiv.innerHTML= `<progress class="tucoHealth" value="100" max="100"></progress>`;
     document.body.append(tucoDiv)
     tucoDiv.appendChild(tuco)
@@ -237,11 +271,20 @@ function credits() {
         }, 5000);
 }
 
+function fadeOutandEndLevel() {
+    document.body.style.animation = 'fadeout 1s'
+    setTimeout(
+        function() {
+            window.location.href = `https://whereswalter.netlify.app/game.html?level=${level + 1}`;
+            //TO DO: set cookies
+        }, 500);
+}
+
 function rvCrash() {
     document.querySelector('.tucoHealth').style.opacity = '0%';
-    const tucoD = document.querySelector('#tucoSalamaca');
+    const tucoD = document.querySelector(`#${bossWithLastName}`);
     const rv = document.createElement('img');
-    rv.src = 'assets/rv.png'
+    rv.src = 'assets/rv.png';
     rv.classList.add('rv');
     document.body.append(rv);
     setTimeout(
@@ -251,34 +294,43 @@ function rvCrash() {
     setTimeout(
         function() {
             tucoD.style.animation = 'killTuco 0.5s';
-            setTimeout(
-                function() {
-                    tucoD.style.opacity = '0%';
-                    subtitle.innerText = ''
-                    let characterTLC = character.toLowerCase()
-                    if (characterTLC === 'walter') {
-                        typeSentence('Jesse: Yo Mr Bitch! Hop in')
-                    } else {
-                        typeSentence(`Walter: ${characterTLC.charAt(0).toUpperCase() + characterTLC.slice(1)}, hop in`)
-                    }
-                    setTimeout(
-                        function() {
-                            document.body.style.animation = 'fadeout 1s'
-                            setTimeout(
-                                function() {
-                                    walter.style.opacity = '0%'
-                                    rv.style.opacity = '0%'
-                                    subtitle.style.opacity = '0%'
-                                    scoreHeader.style.opacity = '0%'
-                                    setTimeout(
-                                        function() {
-                                            credits()
-                                        }, 1000);
-                                }, 990);
-                        }, 8000);
-                }, 490);
         }, 400);
 }
+
+function appendSlideInGuy(name) {
+    let guy = document.createElement('div');
+    guy.classList.add('slideinguy');
+    guy.style.backgroundImage = `url(assets/${name}.png)`
+    document.body.append(guy)
+    setTimeout(
+        function() {
+            guy.style.marginLeft = '65%';
+        }, 496); 
+}
+
+
+
+
+
+
+
+
+
+function levelEnding() {
+    if (level === 1) {
+        subtitle.innerText = ''
+        subtitle.style.opacity = '100%';
+        appendSlideInGuy('jesse');
+        setTimeout(
+            function() {
+                isTalking = true;
+                typeSentence(levelOneText[talkNum]);
+            }, 2500);
+    }
+}
+
+
+
 
 
 
@@ -291,22 +343,24 @@ document.addEventListener('keyup', e => {
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
 
     if(pressed.join('').includes(secretCode)) {
-        score = 90;
+        score = stopGameNum - 9;
     }
 
     if (e.key === "a" && subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
-        tucoHealth -= 2;
+        tucoHealth -= attackLevel;
         document.querySelector('.tucoHealth').value = tucoHealth;
         walter.style.backgroundImage = `url(assets/${character}punch.png)`;
-        document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucoattacked.png)';
+        document.querySelector('.tuco').style.backgroundImage = `url(assets/${boss}attacked.png)`;
         setTimeout(
             function() {
                 walter.style.backgroundImage = `url(assets/${character}fight.png)`;
-                document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucofight.png)';
+                document.querySelector('.tuco').style.backgroundImage = `url(assets/${boss}fight.png)`;
             }, 100);
         if (tucoHealth === 0) {
             subtitle.innerText = ''
-            if (character.toLowerCase() === 'walter') {
+            //ADD LEVEL DEPENDENT ENDING
+
+            /*if (character.toLowerCase() === 'walter') {
                 typeSentence('Tuco: You came here to give me more meth?')
             } else {
                 typeSentence('Tuco: You are dead')
@@ -325,7 +379,7 @@ document.addEventListener('keyup', e => {
             setTimeout(
                 function() {
                     rvCrash();
-                }, 10250);
+                }, 10250);*/
         }
     }
 })
@@ -333,10 +387,16 @@ document.addEventListener('keyup', e => {
 document.addEventListener('keydown', jump)
 
 document.onclick = function(){
-    if (isGameOver && !isFightOn) {
+    if (isGameOver && !isFightOn && !isTalking) {
         start();
-    } else if (isGameOver && isFightOn) {
-        jump()
+    } else if (isGameOver && !isFightOn && isTalking) {
+        talkNum++
+        if (talkNum < levelOneText.length) {
+            subtitle.innerText = '';
+            typeSentence(levelOneText[talkNum]);
+        } else {
+            fadeOutandEndLevel()
+        }
     } else {
         jump()
     }
@@ -374,31 +434,34 @@ setInterval(function () {
         scoreHeader.innerText = score;
     }
 
-    if (score >= 100 && mode === 'story') {
-        fight();
+    if (score >= stopGameNum) {
+        if (!boss) {
+            document.getElementById(`opp${oppNum - 1}`).remove()
+            walter.style.backgroundImage = `url(assets/${character}.png)`;
+            isGameOver = true;
+            levelEnding();
+        } else {
+            fight();
+        }
     }
 }, 500);
 
 setInterval(function () {
     if (subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
-        if (character === 'jr') {
-            score -= 6;
-        } else {
-            score -= 4;
-        }
+        score -= bossAttack;
+
         scoreHeader.innerText = score;
         scoreHeader.style.color = 'red';
         walter.style.backgroundImage = `url(assets/${character}attacked.png)`;
-        document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucopunch.png)';
+        document.querySelector('.tuco').style.backgroundImage = `url(assets/${boss}punch.png)`;
         setTimeout(
             function() {
                 scoreHeader.style.color = scoreColor;
                 walter.style.backgroundImage = `url(assets/${character}fight.png)`;
-                document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucofight.png)';
+                document.querySelector('.tuco').style.backgroundImage = `url(assets/${boss}fight.png)`;
             }, 100);
         if(score < 1) {
             endGame();
-
         }
     }
 }, 499);

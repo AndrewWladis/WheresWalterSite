@@ -72,7 +72,7 @@ document.addEventListener('keyup', e => {
 })
 
 startButton.onclick = function(){
-    let url = new URL("https://whereswalter.netlify.app/game.html?");
+    let url = new URL("https://whereswalter.netlify.app/infinite.html?");
     const soundInput = document.getElementById('soundSlider');
     let sound;
     let guy;
