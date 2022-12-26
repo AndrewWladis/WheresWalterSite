@@ -6,6 +6,7 @@ const title = document.getElementById('title');
 const scoreHeader = document.getElementById('score');
 const scoreGreen = 'rgb(46, 59, 46)';
 const scoreBlue = 'rgb(93, 174, 177)';
+let totalScore = 0;
 let scoreColor = scoreGreen;
 let scoreColorNum = 0;
 let isGameOver = true;
@@ -15,44 +16,133 @@ let score;
 let musicNum = 0;
 let num;
 let isCrystalOnScreen = false;
-let soundCondition = params.get('sound') == 'true';
-let level = parseInt(params.get('level'));
+let soundCondition = true;
 let isFightOn = false;
 let tucoHealth = 100;
 let isTalking = false;
 let talkNum = 0;
+let level;
+
 
 //SET THESE FOR EVERY LEVEL
 let character;
 let boss = false;
 let stopGameNum = 0;
-let bossAttack;
+let bossAttack = 10;
 //how much the boss attacks for, an example could be 4, which is the version you had for the tuco fight
 
-let attackLevel;
+let attackLevel = 4;
 //how much you attack for, an example could be 2, which is the version you had for the tuco fight
 let bossWithLastName;
 //example could be gusFring or tucoSalamanca
 
-const levelOneText = ['WALTER: PINKMAN?', 'JESSE: SHH! MR. WHITE?', 'WALTER: I THINK WE SHOULD PARTNER UP', 'JESSE: YOU WANT TO COOK?', 'WALTER: YOU KNOW THE BUISNESS,', 'WALTER: I KNOW THE CHEMISTRY', "JESSE: FINE. LET'S DO THIS, BITCH"]
+const levelOneText = ['WALTER: PINKMAN?', 'JESSE: SHH! MR. WHITE?', 'WALTER: I THINK WE SHOULD PARTNER UP', 'JESSE: YOU WANT TO COOK?', 'WALTER: YOU KNOW THE BUISNESS,', 'WALTER: I KNOW THE CHEMISTRY', "JESSE: FINE. LET'S DO THIS, BITCH"];
+const levelTwoText = ["WALTER: JESSE, WE NEED TO COOK", "JESSE: LEMME GET A BUYER FIRST", "WALTER: OK, BUT BE QUICK, I NEED TO BE HOME BY 7",];
+const levelThreeText = ["JESSE: YO, WANNA BUY SOME GLASS", "TUCO: YEAH, I'LL GIVE YOU TOP DOLLAR", "JESSE: THANKS, I WON'T DISAPPOINT", "TUCO: YOU BETTER NOT, OR ELSE"];
+const levelFourText = ["WALTER: I SAID BE QUICK", "JESSE: I'M SORRY, IT WAS A LONG WALK", "WALTER: WELL, LET'S COOK"];
+const levelFiveText = ["JESSE: I SENT THE STUFF", "TUCO: I KNOW, IT'S GOOD SHIT", "JESSE: WELL, WHERE'S THE PAY?", "TUCO: WHAT PAY? YOU DON'T GET PAYED", "JESSE: I NEED THAT MONEY", "TUCO: NO"];
+const levelSixText = ["WALTER: WHERE'S THE MONEY?", "JESSE: HE DIDN'T PAY", "WALTER: DIDN'T PAY? I'LL TALK TO HIM", "JESSE: YOU SHOULDN'T, IT'S NO USE", "WALTER: I WON'T TALK, HEISENBERG WILL"];
+const levelSevenText = ["TUCO: WHO ARE YOU?", "WALTER: HEISENBERG, I'M WITH PINKMAN", "TUCO: IT WAS STUPID OF YOU TO COME ALONE", "WALTER: I'M NOT STUPID"];
+let levelText;
 
 
 
 
 
 
+
+//REMOVE FROM PROD
+localStorage.setItem('level', 7)
+
+
+function setNight() {
+    document.body.style.backgroundImage = 'url(assets/night.svg)';
+    subtitle.style.color = scoreBlue;
+    title.style.color = scoreBlue;
+    scoreHeader.style.color = scoreBlue;
+}
+
+function setCity() {
+    document.body.style.backgroundImage = 'url(assets/city.jpg)'
+    subtitle.style.color = '#3d473e';
+    title.style.color = '#3d473e';
+}
+
+function setLevel(p) {
+    level = p;
+    title.innerText = `LEVEL ${p}: `
+    if (level === 1) {
+        localStorage.setItem('totalScore', 0)
+        character = 'walter-familyman';
+        stopGameNum = 25;
+        title.append('PARTNER UP');
+        levelText = levelOneText;
+    } else if (level === 2) {
+        totalScore = parseInt(localStorage.getItem('totalScore'));
+        character = 'walter-familyman';
+        stopGameNum = 25;
+        title.append('NEED TO COOK');
+        levelText = levelTwoText;
+    } else if (level === 3) {
+        totalScore = parseInt(localStorage.getItem('totalScore'));
+        setCity()
+        character = 'jesse';
+        stopGameNum = 30;
+        title.append('TOP DOLLAR');
+        levelText = levelThreeText;
+    } else if (level === 4) {
+        setNight()
+        totalScore = parseInt(localStorage.getItem('totalScore'));
+        character = 'jesse';
+        stopGameNum = 45;
+        title.append("LET'S COOK");
+        levelText = levelFourText;
+    } else if (level === 5) {
+        totalScore = parseInt(localStorage.getItem('totalScore'));
+        setCity();
+        character = 'jesse';
+        stopGameNum = 30;
+        title.append("WHAT PAY?");
+        levelText = levelFiveText;
+    } else if (level === 6) {
+        totalScore = parseInt(localStorage.getItem('totalScore'));
+        character = 'jesse';
+        stopGameNum = 25;
+        title.append("WHERE'S THE MONEY?");
+        levelText = levelSixText;
+    } else if (level === 7) {
+        totalScore = parseInt(localStorage.getItem('totalScore'));
+        setCity();
+        character = 'walter';
+        stopGameNum = 35;
+        title.append("WITH PINKMAN");
+        levelText = levelSevenText;
+        boss = 'tuco'
+    }
+
+    walter.style.backgroundImage = `url("assets/${character}.png")`;
+    scoreHeader.innerText = totalScore
+}
+
+if (localStorage.getItem('level') == null) {
+    localStorage.setItem('level', 1);
+    setLevel(1);
+} else {
+    setLevel(parseInt(localStorage.getItem('level')));
+}
+
+if (document.body.style.backgroundImage === 'url("assets/night.svg")') {
+    scoreHeader.style.color = scoreBlue;
+    scoreColor = scoreBlue;
+} else {
+    scoreHeader.style.color = scoreGreen;
+}
 
 title.style.fontSize = '60px';
 subtitle.classList.add('fade');
-scoreHeader.style.color = scoreGreen;
 
-if (level === 1) {
-    character = 'walter';
-    stopGameNum = 25;
-    title.innerText = 'LEVEL 1: PARTNER UP'
-}
 
-walter.style.backgroundImage = `url("assets/${character}.png")`
+
 var images = [];
 
 function preload() {
@@ -77,7 +167,7 @@ preload(
     'assets/tuco.png',
     'assets/tucoattacked.png',
     'assets/tucofight.png',
-    'assets/tucopunch.png',
+    'assets/tucopunch.png'
 )
 
 
@@ -88,7 +178,7 @@ preload(
 
 
 
-async function typeSentence(sentence, delay = 100) {
+async function typeSentence(sentence, delay = 70) {
     const letters = sentence.split("");
     let i = 0;
     while(i < letters.length) {
@@ -152,10 +242,7 @@ function createCrystal() {
 function createOpp() {
     if (num === 0) {
 
-    } else if (crystalNum === 0) {
-        if (score < stopGameNum - 20) {
-            createCrystal();
-        }
+    } else if (crystalNum === 0 && score < stopGameNum - 30)  {
     } else {
         let opp = document.createElement('img');
         opp.classList.add('opp');
@@ -215,10 +302,10 @@ function endGame() {
 function createTuco() {
     let tucoDiv = document.createElement('div');
     let tuco = document.createElement('div');
+    tuco.style.marginTop = '50px'
     tuco.classList.add('tuco');
-    tuco.id = bossWithLastName;
+    tuco.id = 'tucoSalamaca'
     tucoDiv.classList.add('tuco-div')
-    tucoDiv.style.backgroundImage = `url(assets/${boss}fight.png);`
     tucoDiv.innerHTML= `<progress class="tucoHealth" value="100" max="100"></progress>`;
     document.body.append(tucoDiv)
     tucoDiv.appendChild(tuco)
@@ -230,28 +317,14 @@ function createTuco() {
 }
 
 function fight() {
-    document.getElementById(`opp${oppNum - 1}`).remove()
-    walter.style.backgroundImage = `url(assets/${character}.png)`;
+    walter.style.backgroundImage = 'url(assets/walterfight.png)';
+    subtitle.style.opacity = '100%';
+    subtitle.innerText = 'PRESS A TO ATTACK'
+    console.log('fight test 2')
     isFightOn = true;
     isGameOver = true;
-    /*
-    scoreHeader.style.animation = 'fadeout 1s'
-    score++
-    setTimeout(
-        function() {
-            scoreHeader.style.opacity = '0%';
-        }, 990);
-    */
-    setTimeout(
-        function() {
-            createTuco();
-            let num = Math.floor(Math.random() * 1);
-        }, 1500);
-    setTimeout(
-        function() {
-            subtitle.style.opacity = '100%';
-            subtitle.innerText = 'PRESS A TO ATTACK'
-        }, 3000);
+    isTalking = false;
+    console.log('fight test 3')
 }
 
 function credits() {
@@ -275,31 +348,65 @@ function fadeOutandEndLevel() {
     document.body.style.animation = 'fadeout 1s'
     setTimeout(
         function() {
-            window.location.href = `https://whereswalter.netlify.app/game.html?level=${level + 1}`;
-            //TO DO: set cookies
+            localStorage.setItem('level', level + 1);
+            localStorage.setItem('totalScore', totalScore + score)
+            window.location.reload();
         }, 500);
 }
 
-function rvCrash() {
+function rvCrash(num) {
     document.querySelector('.tucoHealth').style.opacity = '0%';
-    const tucoD = document.querySelector(`#${bossWithLastName}`);
+    const tucoD = document.querySelector('#tucoSalamaca');
     const rv = document.createElement('img');
     rv.src = 'assets/rv.png';
     rv.classList.add('rv');
+    if (num === 2) {
+        rv.style.marginTop = '-10%'
+    }
     document.body.append(rv);
     setTimeout(
         function() {
             rv.style.marginLeft = '65%'
         }, 490);
-    setTimeout(
-        function() {
-            tucoD.style.animation = 'killTuco 0.5s';
-        }, 400);
+    if (level === 7) {
+        setTimeout(
+            function() {
+                tucoD.style.animation = 'killTuco 0.5s';
+                setTimeout(
+                    function() {
+                        tucoD.style.opacity = '0%';
+                        subtitle.innerText = ''
+                        let characterTLC = character.toLowerCase()
+                        if (characterTLC === 'walter') {
+                            typeSentence('Jesse: YEAH SCIENCE, YEAH MR WHITE!')
+                        }
+                        setTimeout(
+                            function() {
+                                document.body.style.animation = 'fadeout 1s'
+                                setTimeout(
+                                    function() {
+                                        walter.style.opacity = '0%'                                        
+                                        rv.style.opacity = '0%'
+                                        subtitle.style.opacity = '0%'
+                                        scoreHeader.style.opacity = '0%'
+                                        setTimeout(
+                                            function() {
+                                                credits()
+                                            }, 1000);
+                                    }, 990);
+                            }, 8000);
+                    }, 490);
+            }, 400);
+    }
 }
 
 function appendSlideInGuy(name) {
     let guy = document.createElement('div');
-    guy.classList.add('slideinguy');
+    if (name === 'tuco') {
+        guy.classList.add('tuco');
+    } else {
+        guy.classList.add('slideinguy');
+    }
     guy.style.backgroundImage = `url(assets/${name}.png)`
     document.body.append(guy)
     setTimeout(
@@ -317,8 +424,8 @@ function appendSlideInGuy(name) {
 
 
 function levelEnding() {
+    subtitle.innerText = ''
     if (level === 1) {
-        subtitle.innerText = ''
         subtitle.style.opacity = '100%';
         appendSlideInGuy('jesse');
         setTimeout(
@@ -326,6 +433,54 @@ function levelEnding() {
                 isTalking = true;
                 typeSentence(levelOneText[talkNum]);
             }, 2500);
+    } else if (level === 2) {
+        subtitle.style.opacity = '100%';
+        rvCrash(2)
+        setTimeout(
+            function() {
+                isTalking = true;
+                typeSentence(levelTwoText[talkNum]);
+            }, 2000);
+    } else if (level === 3) {
+        subtitle.style.opacity = '100%';
+        appendSlideInGuy('tuco');
+        setTimeout(
+            function() {
+                isTalking = true;
+                typeSentence(levelThreeText[talkNum]);
+            }, 2000);
+    } else if (level === 4) {
+        subtitle.style.opacity = '100%';
+        appendSlideInGuy('walter-familyman');
+        setTimeout(
+            function() {
+                isTalking = true;
+                typeSentence(levelFourText[talkNum]);
+            }, 2000);
+    } else if (level === 5) {
+        subtitle.style.opacity = '100%';
+        appendSlideInGuy('tuco');
+        setTimeout(
+            function() {
+                isTalking = true;
+                typeSentence(levelFiveText[talkNum]);
+            }, 2000);
+    } else if (level === 6) {
+        subtitle.style.opacity = '100%';
+        appendSlideInGuy('walter-familyman');
+        setTimeout(
+            function() {
+                isTalking = true;
+                typeSentence(levelSixText[talkNum]);
+            }, 2000);
+    } else if (level === 7) {
+        subtitle.style.opacity = '100%';
+        createTuco();
+        setTimeout(
+            function() {
+                isTalking = true;
+                typeSentence(levelSevenText[talkNum]);
+            }, 2000);
     }
 }
 
@@ -343,7 +498,7 @@ document.addEventListener('keyup', e => {
     pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
 
     if(pressed.join('').includes(secretCode)) {
-        score = stopGameNum - 9;
+        score = stopGameNum - 5;
     }
 
     if (e.key === "a" && subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
@@ -358,28 +513,21 @@ document.addEventListener('keyup', e => {
             }, 100);
         if (tucoHealth === 0) {
             subtitle.innerText = ''
-            //ADD LEVEL DEPENDENT ENDING
-
-            /*if (character.toLowerCase() === 'walter') {
-                typeSentence('Tuco: You came here to give me more meth?')
-            } else {
-                typeSentence('Tuco: You are dead')
-            }
+            typeSentence('TUCO: YOU ARE DEAD')
             setTimeout(
                 function() {
                     subtitle.innerText = ''
-                    if (character.toLowerCase() === 'jr') {
-                        typeSentence('Jr: Your a pussy')
-                    } else if (character.toLowerCase() === 'walter') {
-                        typeSentence('Walter: This is not meth')
-                    } else if (character.toLowerCase() === 'jesse') {
-                        typeSentence('Jesse: Your about to die, bitch')
-                    }
-                }, 6250);
+                    typeSentence('WALTER: YOUR RIGHT...')
+                }, 2000);
+            setTimeout(
+                function() {
+                    subtitle.innerText = ''
+                    typeSentence('WALTER: IT WOULD BE STUPID TO COME ALONE')
+                }, 5000);
             setTimeout(
                 function() {
                     rvCrash();
-                }, 10250);*/
+                }, 10000);
         }
     }
 })
@@ -391,12 +539,34 @@ document.onclick = function(){
         start();
     } else if (isGameOver && !isFightOn && isTalking) {
         talkNum++
-        if (talkNum < levelOneText.length) {
+        if (talkNum < levelText.length) {
             subtitle.innerText = '';
-            typeSentence(levelOneText[talkNum]);
+            typeSentence(levelText[talkNum]);
         } else {
-            fadeOutandEndLevel()
+            if (level === 5) {
+                totalScore -= 10;
+                scoreHeader.innerText = score + totalScore;
+                scoreHeader.style.color = 'red';
+                walter.style.backgroundImage = 'url(assets/jesseattacked.png)';
+                document.querySelector('.tuco').style.backgroundImage = 'url(assets/tucopunch.png)';
+                setTimeout(
+                    function() {
+                        scoreHeader.style.color = scoreColor;
+                        walter.style.backgroundImage = 'url(assets/jesse.png)';
+                        document.querySelector('.tuco').style.backgroundImage = 'url(assets/tuco.png)';;
+                        setTimeout(
+                            function() {
+                                fadeOutandEndLevel()
+                        }, 1000)
+                }, 200);
+            } else if (level === 7) {
+                fight();
+            } else {
+                fadeOutandEndLevel()     
+            }
         }
+    } else if (isFightOn) {
+
     } else {
         jump()
     }
@@ -424,33 +594,33 @@ setInterval(function () {
         scoreColorNum -= 1;
     }
     if (scoreColorNum === 0) {
-        scoreHeader.style.color = scoreGreen;
+        if (document.body.style.backgroundImage === 'url("assets/night.svg")') {
+            scoreHeader.style.color = scoreBlue;
+        } else {
+            scoreHeader.style.color = scoreGreen;
+        }
     }
 }, 1000);
 
 setInterval(function () {
     if (!isGameOver) {
         score++
-        scoreHeader.innerText = score;
+        scoreHeader.innerText = score + totalScore;
     }
 
     if (score >= stopGameNum) {
-        if (!boss) {
-            document.getElementById(`opp${oppNum - 1}`).remove()
-            walter.style.backgroundImage = `url(assets/${character}.png)`;
-            isGameOver = true;
-            levelEnding();
-        } else {
-            fight();
-        }
+        document.getElementById(`opp${oppNum - 1}`).remove()
+        walter.style.backgroundImage = `url(assets/${character}.png)`;
+        isGameOver = true;
+        levelEnding();
     }
 }, 500);
 
 setInterval(function () {
     if (subtitle.innerText === 'PRESS A TO ATTACK' && title.innerText !== 'GAME OVER') {
-        score -= bossAttack;
-
-        scoreHeader.innerText = score;
+        totalScore -= bossAttack;
+        console.log(totalScore)
+        scoreHeader.innerText = score + totalScore;
         scoreHeader.style.color = 'red';
         walter.style.backgroundImage = `url(assets/${character}attacked.png)`;
         document.querySelector('.tuco').style.backgroundImage = `url(assets/${boss}punch.png)`;
@@ -460,7 +630,7 @@ setInterval(function () {
                 walter.style.backgroundImage = `url(assets/${character}fight.png)`;
                 document.querySelector('.tuco').style.backgroundImage = `url(assets/${boss}fight.png)`;
             }, 100);
-        if(score < 1) {
+        if(score + totalScore < 1) {
             endGame();
         }
     }
@@ -499,7 +669,6 @@ setInterval(function () {
             deathSound.play();
         }
     }
-
     if (crystalPosition <= 825 && crystalPosition >= 720 && walterPosition < 175) {
         score += 10;
         scoreColorNum = 3;

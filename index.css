@@ -267,11 +267,11 @@ input:checked + .slider:before {
   width: 175px;
   height: 350px;
   background-image: url(assets/tucofight.png);
-  margin-top: 50px;
+  margin-top: 225px;
+  animation: moveTuco 0.5s;
 }
 
 .tuco-div {
-  
   margin-top: 150px;
 }
 
