@@ -46,15 +46,6 @@ const levelSevenText = ["TUCO: WHO ARE YOU?", "WALTER: HEISENBERG, I'M WITH PINK
 let levelText;
 
 
-
-
-
-
-
-//REMOVE FROM PROD
-localStorage.setItem('level', 7)
-
-
 function setNight() {
     document.body.style.backgroundImage = 'url(assets/night.svg)';
     subtitle.style.color = scoreBlue;
