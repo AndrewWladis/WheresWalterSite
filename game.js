@@ -257,6 +257,10 @@ function rvLeave() {
 }
 
 function start() {
+    isCrystalOnScreen = false;
+    soundCondition = true;
+    isFightOn = false;
+    isTalking = false;
     walter.style.opacity = '100%';
     subtitle.classList.remove('fade');
     subtitle.classList.add('fadeout');
