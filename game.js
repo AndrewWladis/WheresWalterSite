@@ -22,27 +22,23 @@ let tucoHealth = 100;
 let isTalking = false;
 let talkNum = 0;
 let level;
-
-
-//SET THESE FOR EVERY LEVEL
 let character;
 let boss = false;
 let stopGameNum = 0;
 let bossAttack = 10;
-//how much the boss attacks for, an example could be 4, which is the version you had for the tuco fight
-
 let attackLevel = 4;
-//how much you attack for, an example could be 2, which is the version you had for the tuco fight
 let bossWithLastName;
-//example could be gusFring or tucoSalamanca
 
-const levelOneText = ['WALTER: PINKMAN?', 'JESSE: SHH! MR. WHITE?', 'WALTER: I THINK WE SHOULD PARTNER UP', 'JESSE: YOU WANT TO COOK?', 'WALTER: YOU KNOW THE BUISNESS,', 'WALTER: I KNOW THE CHEMISTRY', "JESSE: FINE. LET'S DO THIS, BITCH"];
-const levelTwoText = ["WALTER: JESSE, WE NEED TO COOK", "JESSE: LEMME GET A BUYER FIRST", "WALTER: OK, BUT BE QUICK, I NEED TO BE HOME BY 7",];
-const levelThreeText = ["JESSE: YO, WANNA BUY SOME GLASS", "TUCO: YEAH, I'LL GIVE YOU TOP DOLLAR", "JESSE: THANKS, I WON'T DISAPPOINT", "TUCO: YOU BETTER NOT, OR ELSE"];
-const levelFourText = ["WALTER: I SAID BE QUICK", "JESSE: I'M SORRY, IT WAS A LONG WALK", "WALTER: WELL, LET'S COOK"];
-const levelFiveText = ["JESSE: I SENT THE STUFF", "TUCO: I KNOW, IT'S GOOD SHIT", "JESSE: WELL, WHERE'S THE PAY?", "TUCO: WHAT PAY? YOU DON'T GET PAYED", "JESSE: I NEED THAT MONEY", "TUCO: NO"];
-const levelSixText = ["WALTER: WHERE'S THE MONEY?", "JESSE: HE DIDN'T PAY", "WALTER: DIDN'T PAY? I'LL TALK TO HIM", "JESSE: YOU SHOULDN'T, IT'S NO USE", "WALTER: I WON'T TALK, HEISENBERG WILL"];
-const levelSevenText = ["TUCO: WHO ARE YOU?", "WALTER: HEISENBERG, I'M WITH PINKMAN", "TUCO: IT WAS STUPID OF YOU TO COME ALONE", "WALTER: I'M NOT STUPID"];
+const levelTexts = {
+    levelOneText: ['WALTER: PINKMAN?', 'JESSE: SHH! MR. WHITE?', 'WALTER: I THINK WE SHOULD PARTNER UP', 'JESSE: YOU WANT TO COOK?', 'WALTER: YOU KNOW THE BUISNESS,', 'WALTER: I KNOW THE CHEMISTRY', "JESSE: FINE. LET'S DO THIS, BITCH"],
+    levelTwoText: ["WALTER: JESSE, WE NEED TO COOK", "JESSE: LEMME GET A BUYER FIRST", "WALTER: OK, BUT BE QUICK, I NEED TO BE HOME BY 7"],
+    levelThreeText: ["JESSE: YO, WANNA BUY SOME GLASS", "TUCO: YEAH, I'LL GIVE YOU TOP DOLLAR", "JESSE: THANKS, I WON'T DISAPPOINT", "TUCO: YOU BETTER NOT, OR ELSE"],
+    levelFourText: ["WALTER: I SAID BE QUICK", "JESSE: I'M SORRY, IT WAS A LONG WALK", "WALTER: WELL, LET'S COOK"],
+    levelFiveText: ["JESSE: I SENT THE STUFF", "TUCO: I KNOW, IT'S GOOD SHIT", "JESSE: WELL, WHERE'S THE PAY?", "TUCO: WHAT PAY? YOU DON'T GET PAYED", "JESSE: I NEED THAT MONEY", "TUCO: NO"],
+    levelSixText: ["WALTER: WHERE'S THE MONEY?", "JESSE: HE DIDN'T PAY", "WALTER: DIDN'T PAY? I'LL TALK TO HIM", "JESSE: YOU SHOULDN'T, IT'S NO USE", "WALTER: I WON'T TALK, HEISENBERG WILL"],
+    levelSevenText: ["TUCO: WHO ARE YOU?", "WALTER: HEISENBERG, I'M WITH PINKMAN", "TUCO: IT WAS STUPID OF YOU TO COME ALONE", "WALTER: I'M NOT STUPID"]
+}
+
 let levelText;
 
 
@@ -67,47 +63,47 @@ function setLevel(p) {
         character = 'walter-familyman';
         stopGameNum = 25;
         title.append('PARTNER UP');
-        levelText = levelOneText;
+        levelText = levelTexts.levelOneText;
     } else if (level === 2) {
         totalScore = parseInt(localStorage.getItem('totalScore'));
         character = 'walter-familyman';
         stopGameNum = 25;
         title.append('NEED TO COOK');
-        levelText = levelTwoText;
+        levelText = levelTexts.levelTwoText;
     } else if (level === 3) {
         totalScore = parseInt(localStorage.getItem('totalScore'));
         setCity()
         character = 'jesse';
         stopGameNum = 30;
         title.append('TOP DOLLAR');
-        levelText = levelThreeText;
+        levelText = levelTexts.levelThreeText;
     } else if (level === 4) {
         setNight()
         totalScore = parseInt(localStorage.getItem('totalScore'));
         character = 'jesse';
         stopGameNum = 45;
         title.append("LET'S COOK");
-        levelText = levelFourText;
+        levelText = levelTexts.levelFourText;
     } else if (level === 5) {
         totalScore = parseInt(localStorage.getItem('totalScore'));
         setCity();
         character = 'jesse';
         stopGameNum = 30;
         title.append("WHAT PAY?");
-        levelText = levelFiveText;
+        levelText = levelTexts.levelFiveText;
     } else if (level === 6) {
         totalScore = parseInt(localStorage.getItem('totalScore'));
         character = 'jesse';
         stopGameNum = 25;
         title.append("WHERE'S THE MONEY?");
-        levelText = levelSixText;
+        levelText = levelTexts.levelSixText;
     } else if (level === 7) {
         totalScore = parseInt(localStorage.getItem('totalScore'));
         setCity();
         character = 'walter';
         stopGameNum = 35;
         title.append("WITH PINKMAN");
-        levelText = levelSevenText;
+        levelText = levelTexts.levelSevenText;
         boss = 'tuco'
     }
 
@@ -426,7 +422,7 @@ function levelEnding() {
         setTimeout(
             function() {
                 isTalking = true;
-                typeSentence(levelOneText[talkNum]);
+                typeSentence(levelTexts.levelOneText[talkNum]);
             }, 2500);
     } else if (level === 2) {
         subtitle.style.opacity = '100%';
@@ -434,7 +430,7 @@ function levelEnding() {
         setTimeout(
             function() {
                 isTalking = true;
-                typeSentence(levelTwoText[talkNum]);
+                typeSentence(levelTexts.levelTwoText[talkNum]);
             }, 2000);
     } else if (level === 3) {
         subtitle.style.opacity = '100%';
@@ -442,7 +438,7 @@ function levelEnding() {
         setTimeout(
             function() {
                 isTalking = true;
-                typeSentence(levelThreeText[talkNum]);
+                typeSentence(levelTexts.levelThreeText[talkNum]);
             }, 2000);
     } else if (level === 4) {
         subtitle.style.opacity = '100%';
@@ -450,7 +446,7 @@ function levelEnding() {
         setTimeout(
             function() {
                 isTalking = true;
-                typeSentence(levelFourText[talkNum]);
+                typeSentence(levelTexts.levelFourText[talkNum]);
             }, 2000);
     } else if (level === 5) {
         subtitle.style.opacity = '100%';
@@ -458,7 +454,7 @@ function levelEnding() {
         setTimeout(
             function() {
                 isTalking = true;
-                typeSentence(levelFiveText[talkNum]);
+                typeSentence(levelTexts.levelFiveText[talkNum]);
             }, 2000);
     } else if (level === 6) {
         subtitle.style.opacity = '100%';
@@ -466,7 +462,7 @@ function levelEnding() {
         setTimeout(
             function() {
                 isTalking = true;
-                typeSentence(levelSixText[talkNum]);
+                typeSentence(levelTexts.levelSixText[talkNum]);
             }, 2000);
     } else if (level === 7) {
         subtitle.style.opacity = '100%';
@@ -474,7 +470,7 @@ function levelEnding() {
         setTimeout(
             function() {
                 isTalking = true;
-                typeSentence(levelSevenText[talkNum]);
+                typeSentence(levelTexts.levelSevenText[talkNum]);
             }, 2000);
     }
 }
