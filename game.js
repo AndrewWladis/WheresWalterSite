@@ -112,16 +112,16 @@ function setLevel(p) {
     scoreHeader.innerText = totalScore
 }
 
-if (levelParam === NaN) {
+if (levelParam === 1 || levelParam === 2 || levelParam === 3 || levelParam === 4 || levelParam === 5 || levelParam === 6 || levelParam === 7) {
+    localStorage.setItem('totalScore', 25 * (levelParam - 1))
+    localStorage.setItem('level', levelParam)
+    setLevel(levelParam)
+} else {
     if(localStorage.getItem('level') === NaN) {
         setLevel(1)
     } else {
         setLevel(parseInt(localStorage.getItem('level')));
     }
-} else {
-    localStorage.setItem('totalScore', 25 * (levelParam - 1))
-    localStorage.setItem('level', levelParam)
-    setLevel(levelParam)
 }
 
 if (document.body.style.backgroundImage === 'url("assets/night.svg")') {
