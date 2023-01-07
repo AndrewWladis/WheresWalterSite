@@ -6,6 +6,7 @@ const title = document.getElementById('title');
 const scoreHeader = document.getElementById('score');
 const scoreGreen = 'rgb(46, 59, 46)';
 const scoreBlue = 'rgb(93, 174, 177)';
+let levelParam = parseInt(params.get('level'));
 let totalScore = 0;
 let scoreColor = scoreGreen;
 let scoreColorNum = 0;
@@ -111,9 +112,10 @@ function setLevel(p) {
     scoreHeader.innerText = totalScore
 }
 
-if (localStorage.getItem('level') == null) {
-    localStorage.setItem('level', 1);
-    setLevel(1);
+if (levelParam !== NaN) {
+    localStorage.setItem('totalScore', 25 * (levelParam - 1))
+    localStorage.setItem('level', levelParam)
+    setLevel(levelParam)
 } else {
     setLevel(parseInt(localStorage.getItem('level')));
 }
@@ -341,18 +343,19 @@ function fadeOutandEndLevel() {
         function() {
             localStorage.setItem('level', level + 1);
             localStorage.setItem('totalScore', totalScore + score)
-            window.location.reload();
+            window.location.replace("https://whereswalter-desktop.netlify.app/game.html");
         }, 500);
 }
 
 function rvCrash(num) {
-    document.querySelector('.tucoHealth').style.opacity = '0%';
     const tucoD = document.querySelector('#tucoSalamaca');
     const rv = document.createElement('img');
     rv.src = 'assets/rv.png';
     rv.classList.add('rv');
     if (num === 2) {
         rv.style.marginTop = '-10%'
+    } else {
+        document.querySelector('.tucoHealth').style.opacity = '0%';
     }
     document.body.append(rv);
     setTimeout(
@@ -426,7 +429,15 @@ function levelEnding() {
             }, 2500);
     } else if (level === 2) {
         subtitle.style.opacity = '100%';
-        rvCrash(2)
+        const rv = document.createElement('img');
+        rv.src = 'assets/rv.png';
+        rv.classList.add('rv');
+        rv.style.marginTop = '-10%'
+        document.body.append(rv);
+        setTimeout(
+            function() {
+                rv.style.marginLeft = '65%'
+            }, 490);
         setTimeout(
             function() {
                 isTalking = true;

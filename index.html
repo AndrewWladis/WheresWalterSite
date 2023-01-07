@@ -49,15 +49,19 @@
     <br>
     <div id="config-container">
         <button id="startgamebutton" class="start-button">START GAME</button>
+        <button id="startgamebutton" class="start-button">LEVEL SELECT</button>
         <button id="infinitebutton" class="start-button">INFINITE</button>
     </div>
 </body>
 <script>
     document.getElementById("startgamebutton").onclick = function () {
-        location.href = "https://whereswalter.netlify.app/game.html";
+        location.href = "https://whereswalter-desktop.netlify.app/game.html";
+    };
+    document.getElementById("startgamebutton").onclick = function () {
+        location.href = "https://whereswalter-desktop.netlify.app/levelSelect.html";
     };
     document.getElementById("infinitebutton").onclick = function () {
-        location.href = "https://whereswalter.netlify.app/infinitehub.html";
+        location.href = "https://whereswalter-desktop.netlify.app/infinitehub.html";
     };
 </script>
 </html>
