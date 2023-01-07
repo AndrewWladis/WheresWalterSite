@@ -346,8 +346,8 @@ function fadeOutandEndLevel() {
     setTimeout(
         function() {
             localStorage.setItem('level', level + 1);
-            localStorage.setItem('totalScore', totalScore + score)
-            window.location.replace("https://whereswalter-desktop.netlify.app/game.html");
+            localStorage.setItem('totalScore', totalScore + score);
+            window.location = "https://whereswalter-desktop.netlify.app/game.html";
         }, 500);
 }
 
