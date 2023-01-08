@@ -137,6 +137,13 @@ input:checked + .slider:before {
   color: white;
 }
 
+.credit-text {
+  font-family: fontPixels;
+  color: rgb(119, 119, 119);
+  display: flex;
+  justify-content: center;
+}
+
 .crystal {
   z-index: -1;
   position: fixed;
