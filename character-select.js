@@ -1,3 +1,4 @@
+const walterfm = document.getElementById('walter-familymanicon');
 const walter = document.getElementById('waltericon');
 const jesse = document.getElementById('jesseicon');
 const jr = document.getElementById('jricon');
@@ -7,7 +8,7 @@ const infiniteInput = document.getElementById('infiniteSlider');
 const infiniteLabel = document.getElementById('infiniteLabel')
 const nameOf = (f) => (f).toString().replace(/[ |\(\)=>]/g,'');
 const border = 'border';
-let current = walter;
+let current = walterfm;
 let statusButton = 'story'
 
 current.classList.add(border);
@@ -36,6 +37,10 @@ walter.onclick = function(){
     addBorder(walter, 'walter')
 }
 
+walterfm.onclick = function(){
+    addBorder(walterfm, 'walter-familyman')
+}
+
 jr.onclick = function(){
     addBorder(jr, 'jr')
 }
@@ -54,11 +59,13 @@ jr.onclick = function(){
 document.addEventListener('keyup', e => {
     if (e.key === "ArrowLeft") {
         if (current === walter) {
-            addBorder(jr, 'jr')
+            addBorder(walterfm, 'walter-familyman')
         } else if (current === jr) {
             addBorder(jesse, 'jesse')
         } else if (current === jesse) {
             addBorder(walter, 'walter')
+        } else if (current === walter) {
+            addBorder(walterfm, 'walter-familyman')
         }
     } else if (e.key === "ArrowRight") {
         if (current === walter) {
@@ -66,6 +73,8 @@ document.addEventListener('keyup', e => {
         } else if (current === jesse) {
             addBorder(jr, 'jr')
         } else if (current === jr) {
+            addBorder(walterfm, 'walter-familyman')
+        } else if (current === walterfm) {
             addBorder(walter, 'walter')
         }
     }
@@ -89,6 +98,8 @@ startButton.onclick = function(){
         guy = 'jesse'
     } else if (current === jr) {
         guy = 'jr'
+    } else if (current === walterfm) {
+        guy = 'walter-familyman'
     }
 
     url.searchParams.append('sound', sound);

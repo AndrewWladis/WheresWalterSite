@@ -59,7 +59,9 @@
 </body>
 <script>
     document.getElementById("startgamebutton").onclick = function () {
-        location.href = "https://whereswalter-desktop.netlify.app/game.html";
+        let url = new URL("https://whereswalter-desktop.netlify.app/game.html?");
+        url.searchParams.append('level', 1);
+        location.href = url;
     };
     document.getElementById("levelselectbutton").onclick = function () {
         location.href = "https://whereswalter-desktop.netlify.app/levelSelect.html";
